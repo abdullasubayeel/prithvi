@@ -1,10 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import Chats from './Messaging/Chats';
-import Status from './Messaging/Status';
-import Calls from './Messaging/Calls';
-import {COLORS} from '../constants/colors';
+import Chats from './Chats';
+import Calls from './Calls';
+import {COLORS} from '../../constants/colors';
+import StatusScreen from './helpers/StatusScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -20,7 +20,7 @@ const Tabs = () => {
         },
       })}>
       <Tab.Screen name="Chats" component={Chats} />
-      <Tab.Screen name="Status" component={Status} />
+      <Tab.Screen name="Status" component={StatusScreen} />
       <Tab.Screen name="Calls" component={Calls} />
     </Tab.Navigator>
   );

@@ -2,8 +2,8 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import CustomButton from '../components/CustomButton';
-import {COLORS} from '../constants/colors';
+import CustomButton from '../../components/CustomButton';
+import {COLORS} from '../../constants/colors';
 
 const Subscribe = ({navigation}: any) => {
   return (

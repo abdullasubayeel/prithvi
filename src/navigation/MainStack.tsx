@@ -12,13 +12,13 @@ const MainStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           key="Auth"
           name="Auth"
           component={AuthLoadingScreen}
           options={{
             headerShown: false,
-          }}></Stack.Screen> */}
+          }}></Stack.Screen>
         {authRoutes.map(obj => (
           <Stack.Screen
             {...obj}

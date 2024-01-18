@@ -1,11 +1,11 @@
 // routes.js
 import Home from '../screens/Home';
-import Signin from '../screens/Signin';
-import Signup from '../screens/Signup';
+import Signin from '../screens/Auth/Signin';
+import Signup from '../screens/Auth/Signup';
 import Settings from '../screens/Settings';
-import Subscribe from '../screens/Subscribe';
+import Subscribe from '../screens/Auth/Subscribe';
 import Products from '../screens/Products';
-import Tabs from '../screens/Tabs';
+import Tabs from '../screens/Messaging/Tabs';
 import ChatScreen from '../screens/Messaging/helpers/ChatScreen';
 
 export const routes = [

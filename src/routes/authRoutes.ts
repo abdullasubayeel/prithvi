@@ -1,5 +1,5 @@
-import Signin from '../screens/Signin';
-import Signup from '../screens/Signup';
+import Signin from '../screens/Auth/Signin';
+import Signup from '../screens/Auth/Signup';
 
 export const authRoutes = [
   {

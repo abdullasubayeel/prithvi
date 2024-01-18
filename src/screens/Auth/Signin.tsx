@@ -9,23 +9,22 @@ import {
 } from 'react-native';
 import {BottomSheet} from '@rneui/themed';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import FeatureTile from '../components/FeatureTile';
+import FeatureTile from '../../components/FeatureTile';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import CustomButton from '../components/CustomButton';
+import CustomButton from '../../components/CustomButton';
 import {useDispatch} from 'react-redux';
 
-import {login} from '../redux/slices/authSlice';
-import {globalStyles} from '../styles/GlobalStyles';
+import {login} from '../../redux/slices/authSlice';
+import {globalStyles} from '../../styles/GlobalStyles';
 import auth from '@react-native-firebase/auth';
-import {FIREBASE_AUTH} from '../config/firebaseConfig';
+import {FIREBASE_AUTH} from '../../config/firebaseConfig';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {Formik} from 'formik';
 
 import * as yup from 'yup';
-import {storeAsyncData} from '../utilities/asyncStorage';
-import SplashScreen from 'react-native-splash-screen';
+import {storeAsyncData} from '../../utilities/asyncStorage';
 
-const earth = require('../assets/images/earth.png');
+const earth = require('../../assets/images/earth.png');
 
 const loginValidationSchema = yup.object().shape({
   email: yup

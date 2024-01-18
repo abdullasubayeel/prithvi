@@ -1,11 +1,11 @@
 import {Button, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import {globalStyles} from '../styles/GlobalStyles';
+import {globalStyles} from '../../styles/GlobalStyles';
 import {TextInput} from 'react-native-gesture-handler';
-import CustomButton from '../components/CustomButton';
+import CustomButton from '../../components/CustomButton';
 import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {FIREBASE_AUTH} from '../config/firebaseConfig';
-import {COLORS} from '../constants/colors';
+import {FIREBASE_AUTH} from '../../config/firebaseConfig';
+import {COLORS} from '../../constants/colors';
 import {Formik} from 'formik';
 
 import * as yup from 'yup';
@@ -14,7 +14,7 @@ import {Snackbar} from 'react-native-paper';
 // @ts-ignore
 import {KeyboardAwareView} from 'react-native-keyboard-aware-view';
 
-const plant = require('../assets/images/sapling.png');
+const plant = require('../../assets/images/sapling.png');
 const signupValidationSchema = yup.object().shape({
   email: yup
     .string()

@@ -75,3 +75,10 @@ export const dummyFarmers = [
     farmsOwned: ['farm1'],
   },
 ];
+
+export const dummyStatus = [
+  {id: 1, name: 'Thameez', time: '2024-01-18T02:29:17.304Z'},
+  {id: 2, name: 'Jaya SHop', time: '2024-01-18T11:29:17.304Z'},
+  {id: 3, name: 'Dhanalaxmi Lulu Suppkier', time: '2024-01-18T04:29:17.304Z'},
+  {id: 4, name: 'Syed Alavi', time: '2024-01-18T01:29:17.304Z'},
+];
