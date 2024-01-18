@@ -14,10 +14,10 @@ type statusDataType = {
   name: string;
   time: string;
 };
+
 const StatusScreen = () => {
   const [searchText, setSearchText] = useState('');
   const [filteredStatus, setFilteredStatus] = useState<statusDataType[]>([]);
-  console.log(new Date());
 
   useEffect(() => {
     const newArr = dummyStatus.filter(obj => obj.name.includes(searchText));

@@ -82,3 +82,75 @@ export const dummyStatus = [
   {id: 3, name: 'Dhanalaxmi Lulu Suppkier', time: '2024-01-18T04:29:17.304Z'},
   {id: 4, name: 'Syed Alavi', time: '2024-01-18T01:29:17.304Z'},
 ];
+
+export const dummyCalls = [
+  {
+    id: 1,
+    name: 'Areeb Kazia',
+    frequency: 1,
+    status: 'Missed',
+    time: '2024-01-18T01:29:17.304Z',
+  },
+  {
+    id: 2,
+    name: 'Simaan',
+    frequency: 1,
+    status: 'Outgoing',
+    time: '2024-01-18T01:29:17.304Z',
+  },
+  {
+    id: 3,
+    name: 'Ammi',
+    frequency: 3,
+    status: 'Incoming',
+    time: '2024-01-18T01:29:17.304Z',
+  },
+  {
+    id: 4,
+    name: 'Nayil Ahmed',
+    frequency: 1,
+    status: 'Outgoing',
+    time: '2023-01-18T01:29:17.304Z',
+  },
+  {
+    id: 5,
+    name: 'Areeb Kazia',
+    frequency: 3,
+    status: 'Missed',
+    time: '2024-01-18T01:29:17.304Z',
+  },
+  {
+    id: 6,
+    name: 'Areeb Kazia',
+    frequency: 1,
+    status: 'Outgoing',
+    time: '2022-01-18T01:29:17.304Z',
+  },
+];
+
+export const dummyChatData = [
+  {
+    id: 1,
+    name: 'John Doe',
+    recentMessage: 'Hello there!',
+    recentMessageCount: 3,
+    newMessage: true,
+    lastMessageTime: new Date('2024-01-12T10:30:00'),
+  },
+  {
+    id: 2,
+    name: 'Alice Smith',
+    recentMessage: 'How are you?',
+    recentMessageCount: 1,
+    newMessage: false,
+    lastMessageTime: new Date('2024-01-11T15:45:00'),
+  },
+  {
+    id: 3,
+    name: 'Bob Johnson',
+    recentMessage: "I'll be there soon.",
+    recentMessageCount: 0,
+    newMessage: false,
+    lastMessageTime: new Date('2024-01-10T08:20:00'),
+  },
+];
