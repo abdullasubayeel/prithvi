@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Linking,
 } from 'react-native';
 import React, {memo, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -101,6 +102,11 @@ const ChatScreen = ({route}: any) => {
   const handleWavingPress = () => {
     setChats([{text: 'Hey there!', sender: 'user'}]);
   };
+
+  const phoneNumber = '+919740730152';
+  const makePhoneCall = () => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* Header */}
@@ -122,7 +128,12 @@ const ChatScreen = ({route}: any) => {
           </Text>
         </View>
         <View style={styles.iconContainer}>
-          <Icon name="phone" size={18} style={globalStyles.backIcon} />
+          <Icon
+            onPress={makePhoneCall}
+            name="phone"
+            size={18}
+            style={globalStyles.backIcon}
+          />
           <EntypoIcon.default
             name="attachment"
             size={18}

@@ -14,8 +14,11 @@ import {COLORS} from '../../constants/colors';
 import {dummyChatData} from '../../data/dummyData';
 import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-import Contacts from 'react-native-contacts';
+
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 type ChatsType = {
   id: number;
   name: string;
@@ -36,6 +39,22 @@ const Chats = ({navigation}: any) => {
   const handleNewChat = () => {
     navigation.navigate('Contacts');
   };
+
+  const options = {
+    mediaType: 'photo',
+    cameraType: 'back',
+    durationLimit: 5,
+    saveToPhotos: true,
+  };
+  const openCamera = () => {
+    //@ts-ignore
+    launchCamera(options);
+  };
+
+  const openGallery = async () => {
+    //@ts-ignore
+    const result = await launchImageLibrary(options);
+  };
   return (
     <ScrollView style={styles.chatContainer}>
       <View style={styles.chatHeader}>
@@ -48,7 +67,10 @@ const Chats = ({navigation}: any) => {
           }}>
           Chats
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={openGallery}>
+          <FAIcon name="picture-o" size={24} color={COLORS.primaryColor} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={openCamera}>
           <Icon name="camera" size={24} color={COLORS.primaryColor} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleNewChat}>

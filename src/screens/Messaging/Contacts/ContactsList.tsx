@@ -59,9 +59,8 @@ const ContactsList = () => {
   useEffect(() => {
     setLoading(true);
     Contacts.getAll().then((contacts: any) => {
-      console.log(contacts[0]);
       setContacts(contacts);
-
+      setFilteredContacts(contacts);
       setLoading(false);
     });
   }, []);

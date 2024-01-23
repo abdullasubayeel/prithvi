@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -63,6 +64,11 @@ const FarmerDetails = ({route, navigation}: any) => {
     },
   ];
 
+  const phoneNumber = '+919740730152';
+  const makePhoneCall = () => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+
   return (
     <View style={globalStyles.container}>
       <View style={styles.carouselContainer}>
@@ -111,7 +117,7 @@ const FarmerDetails = ({route, navigation}: any) => {
               name="phone"
               size={32}
               style={{color: COLORS.primaryColor, marginHorizontal: 8}}
-              onPress={handleChatClick}
+              onPress={makePhoneCall}
             />
           </View>
         </View>
