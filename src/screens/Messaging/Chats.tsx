@@ -1,4 +1,7 @@
 import {
+  PermissionStatus,
+  PermissionsAndroid,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,7 +15,7 @@ import {dummyChatData} from '../../data/dummyData';
 import {TextInput} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 import AntIcon from 'react-native-vector-icons/AntDesign';
-
+import Contacts from 'react-native-contacts';
 type ChatsType = {
   id: number;
   name: string;
@@ -21,7 +24,7 @@ type ChatsType = {
   newMessage: boolean;
   lastMessageTime: Date;
 };
-const Chats = () => {
+const Chats = ({navigation}: any) => {
   const [searchText, setSearchText] = useState('');
   const [filteredCall, setFilteredCall] = useState<ChatsType[]>([]);
 
@@ -30,6 +33,9 @@ const Chats = () => {
     setFilteredCall(newArr);
   }, [searchText]);
 
+  const handleNewChat = () => {
+    navigation.navigate('Contacts');
+  };
   return (
     <ScrollView style={styles.chatContainer}>
       <View style={styles.chatHeader}>
@@ -38,7 +44,6 @@ const Chats = () => {
             fontSize: 32,
             fontWeight: '900',
             color: '#222',
-
             flex: 1,
           }}>
           Chats
@@ -46,7 +51,7 @@ const Chats = () => {
         <TouchableOpacity>
           <Icon name="camera" size={24} color={COLORS.primaryColor} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleNewChat}>
           <AntIcon name="plus" style={styles.plusIcon} size={24} />
         </TouchableOpacity>
       </View>

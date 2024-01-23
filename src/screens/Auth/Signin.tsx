@@ -18,7 +18,8 @@ import {login} from '../../redux/slices/authSlice';
 import {globalStyles} from '../../styles/GlobalStyles';
 import auth from '@react-native-firebase/auth';
 import {FIREBASE_AUTH} from '../../config/firebaseConfig';
-import {signInWithEmailAndPassword} from 'firebase/auth';
+
+import {signInWithEmailAndPassword, signInWithPhoneNumber} from 'firebase/auth';
 import {Formik} from 'formik';
 
 import * as yup from 'yup';
@@ -27,14 +28,13 @@ import {storeAsyncData} from '../../utilities/asyncStorage';
 const earth = require('../../assets/images/earth.png');
 
 const loginValidationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email('Please enter valid email')
-    .required('Email Address is Required'),
-  password: yup
-    .string()
-    .min(8, ({min}) => `Password must be at least ${min} characters`)
-    .required('Password is required'),
+  phoneNumber: yup
+    .number()
+    .typeError("That doesn't look like a phone number")
+    .positive("A phone number can't start with a minus")
+    .integer("A phone number can't include a decimal point")
+    .min(8)
+    .required('A phone number is required'),
 });
 
 const Signin = ({navigation}: any) => {
@@ -42,6 +42,9 @@ const Signin = ({navigation}: any) => {
   const [loginToggle, setLoginToggle] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
+
+  const [confirm, setConfirm] = useState<any>(null);
+  const [code, setCode] = useState('');
 
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -81,33 +84,52 @@ const Signin = ({navigation}: any) => {
       desc: 'Keep your email address private, but still recieve message form the app.',
     },
   ];
-
-  const handleLogin = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
-    console.log('calling');
+  async function signIn(phoneNumber: string) {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await signInWithEmailAndPassword(
-        firebaseAuth,
-        email,
-        password,
-      );
-      dispatch(login({email, accessToken: '123'}));
-      storeAsyncData('user', JSON.stringify(response.user));
-      console.log(response);
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      setConfirm(confirmation);
+      setLoading(false);
+    } catch (error) {
+      alert(error);
+      setLoading(false);
+    }
+  }
+  const handleLogin = async ({phoneNumber}: {phoneNumber: string}) => {
+    try {
+      const response = await auth().signInWithPhoneNumber(`+91${phoneNumber}`);
+      dispatch(login({phoneNumber, accessToken: '123'}));
+      storeAsyncData('user', JSON.stringify(response));
+
       setLoading(false);
       navigation.navigate('Home');
     } catch (error) {
-      setLoginError('Something went Wrong');
-      setLoading(false);
       console.log(error);
     }
   };
+
+  async function confirmVerificationCode(code: any) {
+    try {
+      await confirm.confirm(code);
+      setConfirm(null);
+    } catch (error) {
+      alert('Invalid code');
+    }
+  }
+  if (confirm)
+    return (
+      <View>
+        <TextInput
+          value={code}
+          onChangeText={text => setCode(text)}></TextInput>
+        <CustomButton
+          btnText="Submit"
+          onPress={() => confirmVerificationCode(code)}
+          dark={false}
+          disabled={false}
+          loading={false}></CustomButton>
+      </View>
+    );
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -162,7 +184,7 @@ const Signin = ({navigation}: any) => {
             {loginToggle ? (
               <View style={styles.bsContainer}>
                 <View style={styles.bsHeader}>
-                  <Text style={styles.boldText}>Login</Text>
+                  <Text style={[styles.boldText, {fontSize: 24}]}>Login</Text>
                   <Icon
                     name="close"
                     size={20}
@@ -173,7 +195,7 @@ const Signin = ({navigation}: any) => {
                 </View>
                 <Formik
                   validationSchema={loginValidationSchema}
-                  initialValues={{email: '', password: ''}}
+                  initialValues={{phoneNumber: ''}}
                   onSubmit={values => handleLogin(values)}>
                   {({
                     handleChange,
@@ -186,29 +208,16 @@ const Signin = ({navigation}: any) => {
                     return (
                       <>
                         <TextInput
-                          placeholder="Email Address"
+                          placeholder="Phone Number"
                           style={styles.textInput}
-                          onChangeText={handleChange('email')}
-                          onBlur={handleBlur('email')}
-                          value={values.email}
-                          keyboardType="email-address"
+                          onChangeText={handleChange('phoneNumber')}
+                          onBlur={handleBlur('phoneNumber')}
+                          value={values.phoneNumber}
+                          keyboardType="phone-pad"
                         />
-                        {errors.email && (
+                        {errors.phoneNumber && (
                           <Text style={{fontSize: 10, color: 'red'}}>
-                            {errors.email}
-                          </Text>
-                        )}
-                        <TextInput
-                          placeholder="Password"
-                          style={styles.textInput}
-                          onChangeText={handleChange('password')}
-                          onBlur={handleBlur('password')}
-                          value={values.password}
-                          secureTextEntry
-                        />
-                        {errors.password && (
-                          <Text style={{fontSize: 10, color: 'red'}}>
-                            {errors.password}
+                            {errors.phoneNumber}
                           </Text>
                         )}
 
@@ -389,10 +398,12 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   bsHeader: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginHorizontal: 8,
+    marginVertical: 8,
   },
   heading: {
     textAlign: 'center',
@@ -419,3 +430,6 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
 });
+function alert(error: unknown) {
+  throw new Error('Function not implemented.');
+}

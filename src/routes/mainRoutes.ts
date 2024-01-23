@@ -6,6 +6,7 @@ import Tabs from '../screens/Messaging/Tabs';
 import ChatScreen from '../screens/Messaging/helpers/ChatScreen';
 import FarmerList from '../screens/Farmer/FarmerList';
 import FarmerDetails from '../screens/Farmer/helpers/FarmerDetails';
+import ContactsList from '../screens/Messaging/Contacts/ContactsList';
 
 export const mainRoutes = [
   {
@@ -37,6 +38,11 @@ export const mainRoutes = [
     name: 'Chat Screen',
     component: ChatScreen,
     headerShown: false,
+  },
+  {
+    name: 'Contacts',
+    component: ContactsList,
+    headerShown: true,
   },
   {
     name: 'Farmers',

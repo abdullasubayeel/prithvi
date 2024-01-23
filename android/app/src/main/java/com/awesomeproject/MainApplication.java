@@ -12,6 +12,7 @@ import java.util.List;
 
 // react-native-splash-screen >= 0.3.1
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts; 
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -24,10 +25,12 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected List<ReactPackage> getPackages() {
+
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new SplashScreenReactPackage());
+          // packages.add(new ReactNativeContacts());
           
           return packages;
         }

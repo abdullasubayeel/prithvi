@@ -9,6 +9,8 @@ import store from './src/redux/store';
 import Navigation from './src/navigation/Navigation';
 import {useCameraPermission} from 'react-native-vision-camera';
 import SplashScreen from 'react-native-splash-screen';
+import {PermissionsAndroid} from 'react-native';
+import Contacts from 'react-native-contacts';
 
 function App() {
   const {hasPermission, requestPermission} = useCameraPermission();
@@ -17,6 +19,7 @@ function App() {
     if (!hasPermission) {
       requestPermission();
     }
+
     SplashScreen.hide();
   }, []);
 

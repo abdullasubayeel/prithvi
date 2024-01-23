@@ -51,17 +51,6 @@ const ChatScreen = ({route}: any) => {
     status: 'Online',
   };
 
-  const dummyChats = [
-    {
-      id: 'uuidv4()',
-      senderName: 'user',
-      receiverName: 'otherUser',
-      messages: message,
-      time: new Date().toISOString(),
-      status: 'MESSAGE',
-    },
-  ];
-
   const handleSendMessage = () => {
     if (message.trim() !== '') {
       // setChats([...chats, {text: message, sender: 'user'}]);
@@ -76,13 +65,6 @@ const ChatScreen = ({route}: any) => {
       appendAndTransformChats(newMessage);
       // Simulate a response from the other user after a short delay
       setTimeout(() => {
-        // setChats(curChats => [
-        //   ...curChats,
-        //   {
-        //     text: 'I am not trained to reply to your text.',
-        //     sender: 'otherUser',
-        //   },
-        // ]);
         let newOtherUserMessage = {
           id: 'uuidv4()nnn',
           senderName: 'otherUser',
@@ -181,7 +163,7 @@ const ChatScreen = ({route}: any) => {
             <>
               <Text style={styles.dateText}>{obj}</Text>
               {chatsByDate[obj]?.map((ch: messageType) => (
-                <View>
+                <View style={{marginVertical: 4}}>
                   <View>
                     <Text
                       style={
