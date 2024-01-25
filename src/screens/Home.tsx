@@ -1,12 +1,23 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  NativeModules,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useLayoutEffect} from 'react';
 import HomeCard from '../components/HomeCard';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import {HOME_DATA} from '../constants/HomeData';
 import SplashScreen from 'react-native-splash-screen';
+import Config from 'react-native-config';
 
 const Home = ({navigation}: any) => {
+  const apiBaseUrl = Config.API_BASE_URL;
+  const apiKey = Config.API_KEY;
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.homeContainer}>

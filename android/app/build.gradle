@@ -1,6 +1,11 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 
+project.ext.envConfigFiles = [
+    production: ".env.production",
+    development: ".env.development",
+    staging: ".env.staging"
+]
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -73,6 +78,29 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    flavorDimensions "default"
+ 
+         productFlavors {
+             production { 
+                minSdkVersion rootProject.ext.minSdkVersion
+                applicationId "com.awesomeproject.production" 
+                targetSdkVersion rootProject.ext.targetSdkVersion 
+                resValue "string", "build_config_package", "com.awesomeproject"
+            }
+             development { 
+                minSdkVersion rootProject.ext.minSdkVersion
+                applicationId "com.awesomeproject.development" 
+                targetSdkVersion rootProject.ext.targetSdkVersion 
+                resValue "string", "build_config_package", "com.awesomeproject"
+            } 
+             staging { 
+                minSdkVersion rootProject.ext.minSdkVersion
+                applicationId "com.awesomeproject.staging" 
+                targetSdkVersion rootProject.ext.targetSdkVersion 
+                resValue "string", "build_config_package", "com.awesomeproject"
+            }                  
+        }
+
     namespace "com.awesomeproject"
     defaultConfig {
         applicationId "com.awesomeproject"
@@ -128,5 +156,7 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 
 apply plugin: 'com.google.gms.google-services'
+
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 

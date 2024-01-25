@@ -14,9 +14,10 @@ export const HOME_DATA = [
   },
   {
     id: '2',
-    title: 'My Carbon Emission',
+    title: 'CO2e',
     color: '#67C5C0',
     iconName: 'lightbulb',
+    pressRoute: 'Carbon',
   },
   {
     id: '3',

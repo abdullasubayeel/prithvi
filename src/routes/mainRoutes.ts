@@ -7,6 +7,8 @@ import ChatScreen from '../screens/Messaging/helpers/ChatScreen';
 import FarmerList from '../screens/Farmer/FarmerList';
 import FarmerDetails from '../screens/Farmer/helpers/FarmerDetails';
 import ContactsList from '../screens/Messaging/Contacts/ContactsList';
+import CarbonDashboard from '../screens/CarbonEmission/CarbonDashboard';
+import CarbonForm from '../screens/CarbonEmission/CarbonForm';
 
 export const mainRoutes = [
   {
@@ -52,6 +54,16 @@ export const mainRoutes = [
   {
     name: 'Farmer Details',
     component: FarmerDetails,
+    headerShown: true,
+  },
+  {
+    name: 'Carbon',
+    component: CarbonDashboard,
+    headerShown: false,
+  },
+  {
+    name: 'Carbon Emission',
+    component: CarbonForm,
     headerShown: true,
   },
 ];
