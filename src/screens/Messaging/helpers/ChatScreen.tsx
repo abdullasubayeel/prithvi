@@ -10,7 +10,7 @@ import {
   View,
   Linking,
 } from 'react-native';
-import React, {memo, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import * as EntypoIcon from 'react-native-vector-icons/Entypo';
 import {globalStyles} from '../../../styles/GlobalStyles';
@@ -22,6 +22,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import WavingImage from '../../../components/WavingHand';
 import {v4 as uuidv4} from 'uuid';
 import moment from 'moment';
+import {GiftedChat} from 'react-native-gifted-chat';
 
 const dummyImg = require('../../../assets/images/earth.png');
 const noChats = require('../../../assets/images/no-chats.png');
@@ -107,6 +108,29 @@ const ChatScreen = ({route}: any) => {
   const makePhoneCall = () => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
+
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    // setMessages([
+    //   {
+    //     _id: 1,
+    //     text: 'Hello developer',
+    //     createdAt: new Date(),
+    //     user: {
+    //       _id: 2,
+    //       name: 'React Native',
+    //       avatar: 'https://placeimg.com/140/140/any',
+    //     },
+    //   },
+    // ])
+  }, []);
+
+  const onSend = useCallback((messages = []) => {
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, messages),
+    );
+  }, []);
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* Header */}

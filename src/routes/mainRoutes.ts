@@ -9,6 +9,10 @@ import FarmerDetails from '../screens/Farmer/helpers/FarmerDetails';
 import ContactsList from '../screens/Messaging/Contacts/ContactsList';
 import CarbonDashboard from '../screens/CarbonEmission/CarbonDashboard';
 import CarbonForm from '../screens/CarbonEmission/CarbonForm';
+import FarmsDashboard from '../screens/Farms/FarmsDashboard';
+import Donation from '../screens/Donation/Donation';
+import Recycle from '../screens/Recycle/Recycle';
+import Initiatives from '../screens/Initiative/Initiative';
 
 export const mainRoutes = [
   {
@@ -65,5 +69,25 @@ export const mainRoutes = [
     name: 'Carbon Emission',
     component: CarbonForm,
     headerShown: true,
+  },
+  {
+    name: 'Farms',
+    component: FarmsDashboard,
+    headerShown: false,
+  },
+  {
+    name: 'Donation',
+    component: Donation,
+    headerShown: false,
+  },
+  {
+    name: 'Recycle',
+    component: Recycle,
+    headerShown: false,
+  },
+  {
+    name: 'Initiatives',
+    component: Initiatives,
+    headerShown: false,
   },
 ];

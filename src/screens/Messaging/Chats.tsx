@@ -18,17 +18,28 @@ import FAIcon from 'react-native-vector-icons/FontAwesome';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import firestore from '@react-native-firebase/firestore';
 
 type ChatsType = {
-  id: number;
+  userId: number;
   name: string;
   recentMessage: string;
   recentMessageCount: number;
   newMessage: boolean;
   lastMessageTime: Date;
 };
+
+type userType = {
+  email: string;
+  fullName: string;
+  password: string;
+  phoneNumber: string;
+  userId: string;
+};
 const Chats = ({navigation}: any) => {
   const [searchText, setSearchText] = useState('');
+  const [users, setUsers] = useState<userType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [filteredCall, setFilteredCall] = useState<ChatsType[]>([]);
 
   useEffect(() => {
@@ -55,6 +66,19 @@ const Chats = ({navigation}: any) => {
     //@ts-ignore
     const result = await launchImageLibrary(options);
   };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  const getAllUsers = async () => {
+    const existingUser = await firestore().collection('users').get();
+    const usersData: userType[] = existingUser.docs.map(
+      doc => doc.data() as userType,
+    );
+    setUsers(usersData);
+  };
+
   return (
     <ScrollView style={styles.chatContainer}>
       <View style={styles.chatHeader}>
@@ -85,8 +109,14 @@ const Chats = ({navigation}: any) => {
         style={styles.searchField}></TextInput>
 
       {searchText
-        ? filteredCall.map(obj => <ChatTile key={obj.id} {...obj} />)
-        : dummyChatData.map(obj => <ChatTile key={obj.id} {...obj} />)}
+        ? filteredCall.map(obj => <ChatTile key={obj.userId} {...obj} />)
+        : dummyChatData.map(obj => <ChatTile key={obj.userId} {...obj} />)}
+
+      {users.map(obj => (
+        <TouchableOpacity>
+          <Text>{obj.email}</Text>
+        </TouchableOpacity>
+      ))}
     </ScrollView>
   );
 };

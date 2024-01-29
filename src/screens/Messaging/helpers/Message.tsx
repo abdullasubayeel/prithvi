@@ -1,15 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import UnderProgress from '../../../components/UnderProgress';
 
-const Electricity = () => {
+const Message = () => {
   return (
     <View>
-      <UnderProgress />
+      <Text>Message</Text>
     </View>
   );
 };
 
-export default Electricity;
+export default Message;
 
 const styles = StyleSheet.create({});

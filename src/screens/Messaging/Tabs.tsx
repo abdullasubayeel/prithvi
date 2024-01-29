@@ -13,10 +13,12 @@ const Tabs = () => {
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: true,
-        tabBarActiveTintColor: '#fff',
-
-        tabBarStyle: {
+        tabBarActiveTintColor: COLORS.primaryColor,
+        tabBarIndicatorStyle: {
           backgroundColor: COLORS.primaryColor,
+        },
+        tabBarStyle: {
+          backgroundColor: COLORS.backgroundColor,
         },
       })}>
       <Tab.Screen name="Chats" component={Chats} />

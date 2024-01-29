@@ -14,16 +14,35 @@ import {Snackbar} from 'react-native-paper';
 // @ts-ignore
 import {KeyboardAwareView} from 'react-native-keyboard-aware-view';
 
+import firestore from '@react-native-firebase/firestore';
+import uuid from 'react-native-uuid';
+
 const plant = require('../../assets/images/sapling.png');
+
+const initialSignUpValues = {
+  fullName: '',
+  phoneNumber: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
 const signupValidationSchema = yup.object().shape({
+  fullName: yup.string().required('Name is Required'),
+  phone: yup.number().max(8, ({max}) => `Phone number must be of 10 digits`),
   email: yup
     .string()
     .email('Please enter valid email')
     .required('Email Address is Required'),
   password: yup
+
     .string()
     .min(8, ({min}) => `Password must be at least ${min} characters`)
     .required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .min(8, ({min}) => `Password must be at least ${min} characters`)
+    .required('Password is required')
+    .oneOf([yup.ref('password'), ''], 'Passwords must match'),
 });
 
 const Signup = ({navigation}: any) => {
@@ -33,26 +52,61 @@ const Signup = ({navigation}: any) => {
   });
   const [isLoading, setLoading] = useState(false);
   const handleSignUp = async ({
+    fullName,
+    phoneNumber,
     email,
     password,
+    confirmPassword,
   }: {
+    fullName: string;
+    phoneNumber: string;
     email: string;
     password: string;
+    confirmPassword: string;
   }) => {
     setLoading(true);
+    const userId = uuid.v4().toString();
     try {
-      const response = await createUserWithEmailAndPassword(
-        FIREBASE_AUTH,
-        email,
-        password,
-      );
+      const existingUser = await firestore()
+        .collection('users')
+        .where('email', '==', email)
+        .get();
+
+      if (existingUser.size !== 0) {
+        setLoading(false);
+
+        return;
+      }
+      const storeUser = firestore()
+        .collection('users')
+        .doc(userId)
+        .set({
+          userId: userId,
+          fullName,
+          phoneNumber,
+          email,
+          password,
+        })
+        .then(async (response: any) => {
+          console.log('User Created');
+          const authResponse = await createUserWithEmailAndPassword(
+            FIREBASE_AUTH,
+            email,
+            password,
+          );
+
+          navigation.navigate('Signin');
+        })
+        .catch((err: any) => {
+          console.log('Error', err);
+        });
+
+      console.log('store', storeUser);
       setSnackbarVisible({
         visible: true,
         message: 'Sucessfully registered!, Redirecting...',
       });
       setLoading(false);
-      navigation.navigate('Signin');
-      console.log(response);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -83,7 +137,7 @@ const Signup = ({navigation}: any) => {
       </Text>
       <Formik
         validationSchema={signupValidationSchema}
-        initialValues={{email: '', password: ''}}
+        initialValues={initialSignUpValues}
         onSubmit={values => handleSignUp(values)}>
         {({
           handleChange,
@@ -92,51 +146,87 @@ const Signup = ({navigation}: any) => {
           values,
           errors,
           isValid,
-        }) => (
-          <>
-            <TextInput
-              placeholder="Email Address"
-              style={styles.textInput}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-              keyboardType="email-address"
-            />
-            {errors.email && (
-              <Text style={{fontSize: 10, color: 'red'}}>{errors.email}</Text>
-            )}
-            <TextInput
-              placeholder="Password"
-              style={styles.textInput}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-              secureTextEntry
-            />
-            {errors.password && (
-              <Text style={{fontSize: 10, color: 'red'}}>
-                {errors.password}
-              </Text>
-            )}
+        }) => {
+          return (
+            <>
+              <TextInput
+                placeholder="Full Name"
+                style={styles.textInput}
+                onChangeText={handleChange('fullName')}
+                onBlur={handleBlur('fullName')}
+                value={values.fullName}
+                keyboardType="default"
+              />
+              {errors.fullName && (
+                <Text style={{fontSize: 10, color: 'red'}}>
+                  {errors.fullName}
+                </Text>
+              )}
+              <TextInput
+                placeholder="Phone Number"
+                style={styles.textInput}
+                onChangeText={handleChange('phoneNumber')}
+                onBlur={handleBlur('phoneNumber')}
+                value={values.phoneNumber}
+                keyboardType="number-pad"
+              />
+              {errors.phoneNumber && (
+                <Text style={{fontSize: 10, color: 'red'}}>
+                  {errors.phoneNumber}
+                </Text>
+              )}
+              <TextInput
+                placeholder="Email Address"
+                style={styles.textInput}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                keyboardType="email-address"
+              />
+              {errors.email && (
+                <Text style={{fontSize: 10, color: 'red'}}>{errors.email}</Text>
+              )}
+              <TextInput
+                placeholder="Password"
+                style={styles.textInput}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                secureTextEntry
+              />
+              <TextInput
+                placeholder="Confirm Password"
+                style={styles.textInput}
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur('confirmPassword')}
+                value={values.confirmPassword}
+                secureTextEntry
+              />
+              {errors.confirmPassword && (
+                <Text style={{fontSize: 10, color: 'red'}}>
+                  {errors.confirmPassword}
+                </Text>
+              )}
 
-            <Text style={{marginLeft: 8, marginVertical: 8, fontSize: 12}}>
-              Already a part of Green Journey?{' '}
-              <Text
-                onPress={() => navigation.navigate('Signin')}
-                style={[globalStyles.anchorText]}>
-                {' '}
-                Login Here{' '}
+              <Text style={{marginLeft: 8, marginVertical: 8, fontSize: 12}}>
+                Already a part of Green Journey?{' '}
+                <Text
+                  onPress={() => navigation.navigate('Signin')}
+                  style={[globalStyles.anchorText]}>
+                  {' '}
+                  Login Here{' '}
+                </Text>
               </Text>
-            </Text>
-            <CustomButton
-              dark={true}
-              onPress={handleSubmit}
-              btnText="Submit"
-              disabled={!isValid}
-              loading={isLoading}
-            />
-          </>
-        )}
+              <CustomButton
+                dark={true}
+                onPress={handleSubmit}
+                btnText="Submit"
+                disabled={!isValid}
+                loading={isLoading}
+              />
+            </>
+          );
+        }}
       </Formik>
 
       <Snackbar

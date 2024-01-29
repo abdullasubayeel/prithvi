@@ -24,6 +24,8 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {storeAsyncData} from '../../utilities/asyncStorage';
 
+import firestore from '@react-native-firebase/firestore';
+
 const earth = require('../../assets/images/earth.png');
 
 const loginValidationSchema = yup.object().shape({
@@ -89,16 +91,27 @@ const Signin = ({navigation}: any) => {
     email: string;
     password: string;
   }) => {
-    console.log('calling');
     try {
       setLoading(true);
+      const existingUser = await firestore()
+        .collection('users')
+        .where('email', '==', email)
+        .get();
+      if (existingUser.empty) {
+        setLoginError("User with given Credentials doesn't exists.");
+        setLoading(false);
+        return;
+      }
+
       const response = await signInWithEmailAndPassword(
         firebaseAuth,
         email,
         password,
       );
+
+      console.log('existingUser', existingUser);
       dispatch(login({email, accessToken: '123'}));
-      storeAsyncData('user', JSON.stringify(response.user));
+      storeAsyncData('user', JSON.stringify(existingUser.docs[0].data()));
       console.log(response);
       setLoading(false);
       navigation.navigate('Home');

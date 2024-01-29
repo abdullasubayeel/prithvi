@@ -130,7 +130,7 @@ export const dummyCalls = [
 
 export const dummyChatData = [
   {
-    id: 1,
+    userId: 1,
     name: 'John Doe',
     recentMessage: 'Hello there!',
     recentMessageCount: 3,
@@ -138,7 +138,7 @@ export const dummyChatData = [
     lastMessageTime: new Date('2024-01-12T10:30:00'),
   },
   {
-    id: 2,
+    userId: 2,
     name: 'Alice Smith',
     recentMessage: 'How are you?',
     recentMessageCount: 1,
@@ -146,7 +146,7 @@ export const dummyChatData = [
     lastMessageTime: new Date('2024-01-11T15:45:00'),
   },
   {
-    id: 3,
+    userId: 3,
     name: 'Bob Johnson',
     recentMessage: "I'll be there soon.",
     recentMessageCount: 0,

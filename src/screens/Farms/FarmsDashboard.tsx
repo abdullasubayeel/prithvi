@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import UnderProgress from '../../../components/UnderProgress';
+import UnderProgress from '../../components/UnderProgress';
 
-const Electricity = () => {
+const FarmsDashboard = () => {
   return (
     <View>
       <UnderProgress />
@@ -10,6 +10,6 @@ const Electricity = () => {
   );
 };
 
-export default Electricity;
+export default FarmsDashboard;
 
 const styles = StyleSheet.create({});

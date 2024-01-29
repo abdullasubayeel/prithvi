@@ -4,6 +4,7 @@ import React from 'react';
 import {formatDateTime} from '../../../utilities/date';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {getAsyncData} from '../../../utilities/asyncStorage';
 
 export type RootStackParamList = {
   'Chat Screen': {chatId: number} | undefined;
@@ -11,7 +12,7 @@ export type RootStackParamList = {
 
 const dummyImg = require('../../../assets/images/earth.png');
 const ChatTile = ({
-  id,
+  userId,
   name,
   recentMessage,
   recentMessageCount,
@@ -20,10 +21,11 @@ const ChatTile = ({
 }: any) => {
   const formattedDate = formatDateTime(lastMessageTime);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
   return (
     <TouchableOpacity
       style={styles.chatTileContainer}
-      onPress={() => navigation.navigate('Chat Screen', {chatId: id})}>
+      onPress={() => navigation.navigate('Chat Screen', {chatId: userId})}>
       <Image
         style={{flex: 1, borderRadius: 24, height: 56, width: 56}}
         source={dummyImg}
