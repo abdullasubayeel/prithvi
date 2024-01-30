@@ -58,7 +58,15 @@ const Home = ({navigation}: any) => {
         </View>
 
         <CustomButton
-          btnText="Continue"
+          btnText="View Settings"
+          dark={true}
+          onPress={() => navigation.navigate('Settings')}
+          loading={false}
+          disabled={false}
+        />
+
+        <CustomButton
+          btnText="Test"
           dark={true}
           onPress={() => onDisplayNotification()}
           loading={false}

@@ -10,7 +10,7 @@ import {
   View,
   Linking,
 } from 'react-native';
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import * as EntypoIcon from 'react-native-vector-icons/Entypo';
 import {globalStyles} from '../../../styles/GlobalStyles';
@@ -52,6 +52,8 @@ const ChatScreen = ({route}: any) => {
 
   const navigation = useNavigation();
 
+  const scrollViewRef = useRef(null);
+
   const getUserData = async () => {
     const myData = await firestore()
       .collection('users')
@@ -59,10 +61,6 @@ const ChatScreen = ({route}: any) => {
       .get();
     //@ts-ignore
     setUserData(myData.docs[0]._data);
-  };
-  const dummyChatUser = {
-    name: 'John Doe',
-    status: 'Online',
   };
 
   const handleSendMessage = () => {
@@ -96,12 +94,13 @@ const ChatScreen = ({route}: any) => {
   const loadPreviousChats = (chats: messageType[]) => {
     let updatedChatsByDate = {...chatsByDate};
 
-    chats.map(obj => {
+    chats.forEach(obj => {
       const messageDate = new Date(obj.createdAt).toDateString();
       if (!updatedChatsByDate[messageDate]) {
         updatedChatsByDate[messageDate] = [];
       }
       updatedChatsByDate[messageDate].push(obj);
+      console.log(updatedChatsByDate);
     });
     setChatsByDate(updatedChatsByDate);
   };
@@ -154,6 +153,14 @@ const ChatScreen = ({route}: any) => {
       subscriber();
     };
   }, [chatId]);
+
+  useEffect(() => {
+    // Scroll to the bottom when component mounts or chatsByDate changes
+    if (scrollViewRef.current) {
+      //@ts-ignore
+      scrollViewRef.current.scrollToEnd({animated: true});
+    }
+  }, [chatsByDate]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -208,16 +215,22 @@ const ChatScreen = ({route}: any) => {
           <Image source={noChats} resizeMode="contain" style={{height: 180}} />
           <Text style={{fontSize: 28, color: '#222'}}>No Message, yet</Text>
           <Text style={globalStyles.lightText}>
-            Say Hello to {dummyChatUser.name}
+            Say Hello to {userData?.fullName}
           </Text>
           <WavingImage handleOnPress={handleWavingPress} />
         </View>
       ) : (
         <ScrollView
           style={{
-            marginBottom: 55,
-            padding: 12,
-          }}>
+            marginBottom: 60,
+            paddingHorizontal: 12,
+            // flexDirection: 'column-reverse',
+          }}
+          ref={scrollViewRef}
+          onContentSizeChange={() =>
+            //@ts-ignore
+            scrollViewRef.current.scrollToEnd({animated: true})
+          }>
           {Object.keys(chatsByDate).map(obj => (
             <>
               <Text style={styles.dateText}>{obj}</Text>

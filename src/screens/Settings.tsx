@@ -10,13 +10,11 @@ const Settings = ({navigation}: any) => {
       id: '0',
       title: 'Daily expenses',
       text: 'Get a remainder to add your expenses',
-      toggle: true,
     },
     {
       id: '1',
       title: 'Bill remainders',
       text: "We'll remind you when it's time to pay the bills",
-      toggle: false,
     },
   ];
   return (
@@ -34,7 +32,7 @@ const Settings = ({navigation}: any) => {
       </View>
       <CustomButton
         onPress={() => navigation.navigate('Subscribe')}
-        dark={false}
+        dark={true}
         btnText="View Plans"
         loading={false}
         disabled={false}
