@@ -10,12 +10,20 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import {COLORS} from '../constants/colors';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {strings} from '../localization';
 
 export type RootStackParamList = {
   Messages: {id: number} | undefined;
   Signin: {id: number} | undefined;
 };
-const HomeCard = ({iconName, color, title, pressRoute}: any) => {
+
+type HomeCardProps = {
+  iconName: string;
+  color: string;
+  title: string;
+  pressRoute: any;
+};
+const HomeCard = ({iconName, color, title, pressRoute}: HomeCardProps) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
@@ -27,7 +35,8 @@ const HomeCard = ({iconName, color, title, pressRoute}: any) => {
         name={iconName}
         color="#fff"
         size={20}></Icon>
-      <Text style={styles.titleStyle}>{title}</Text>
+
+      <Text style={styles.titleStyle}>{strings[title]}</Text>
     </TouchableOpacity>
   );
 };

@@ -13,6 +13,7 @@ import java.util.List;
 // react-native-splash-screen >= 0.3.1
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts; 
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage; 
 
 public class MainApplication extends Application implements ReactApplication {
 

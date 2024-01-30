@@ -6,18 +6,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useLayoutEffect} from 'react';
+import React, {useContext, useEffect, useLayoutEffect} from 'react';
 import HomeCard from '../components/HomeCard';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import {HOME_DATA} from '../constants/HomeData';
 import Config from 'react-native-config';
 import notifee from '@notifee/react-native';
+import {strings} from '../localization';
+import AuthContext from '../context/AuthProvider';
 
 const Home = ({navigation}: any) => {
   const apiBaseUrl = Config.API_BASE_URL;
   const apiKey = Config.API_KEY;
-
+  const {lng} = useContext(AuthContext);
+  strings.setLanguage(lng);
   async function onDisplayNotification() {
     try {
       // Request permissions (required for iOS)
@@ -46,6 +49,7 @@ const Home = ({navigation}: any) => {
       console.log(err);
     }
   }
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.homeContainer}>
