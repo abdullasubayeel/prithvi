@@ -95,18 +95,18 @@ const Signup = ({navigation}: any) => {
             password,
           );
 
+          setSnackbarVisible({
+            visible: true,
+            message: 'Sucessfully registered!, Redirecting...',
+          });
           navigation.navigate('Signin');
+          setLoading(false);
         })
         .catch((err: any) => {
           console.log('Error', err);
         });
 
       console.log('store', storeUser);
-      setSnackbarVisible({
-        visible: true,
-        message: 'Sucessfully registered!, Redirecting...',
-      });
-      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);

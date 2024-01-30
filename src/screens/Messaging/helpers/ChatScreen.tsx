@@ -20,20 +20,22 @@ import {useNavigation} from '@react-navigation/native';
 import IoniIcon from 'react-native-vector-icons/Ionicons';
 import {FlatList} from 'react-native-gesture-handler';
 import WavingImage from '../../../components/WavingHand';
-import {v4 as uuidv4} from 'uuid';
+
 import moment from 'moment';
 import {GiftedChat} from 'react-native-gifted-chat';
+
+import firestore from '@react-native-firebase/firestore';
+import {UserData} from '../../../enums/ChatTypes';
 
 const dummyImg = require('../../../assets/images/earth.png');
 const noChats = require('../../../assets/images/no-chats.png');
 const palm = require('../../../assets/images/hand.png');
 
 type messageType = {
-  id: string;
-  senderName: string;
-  recieverName: string;
+  sentBy: string;
+  sentTo: string;
   messages: string;
-  time: Date;
+  createdAt: string;
   status: string;
 };
 
@@ -41,13 +43,23 @@ type chatsByDateType = {
   [key: string]: messageType[];
 };
 const ChatScreen = ({route}: any) => {
-  const {chatId} = route.params;
+  const {chatId, myId} = route.params;
 
   const [message, setMessage] = useState('');
+  const [userData, setUserData] = useState<UserData>();
   const [chats, setChats] = useState<Array<{text: string; sender: string}>>([]);
   const [chatsByDate, setChatsByDate] = useState<chatsByDateType>({});
 
   const navigation = useNavigation();
+
+  const getUserData = async () => {
+    const myData = await firestore()
+      .collection('users')
+      .where('userId', '==', chatId)
+      .get();
+    //@ts-ignore
+    setUserData(myData.docs[0]._data);
+  };
   const dummyChatUser = {
     name: 'John Doe',
     status: 'Online',
@@ -57,28 +69,41 @@ const ChatScreen = ({route}: any) => {
     if (message.trim() !== '') {
       // setChats([...chats, {text: message, sender: 'user'}]);
       let newMessage = {
-        id: 'uuidv4()',
-        senderName: 'user',
-        receiverName: 'otherUser',
+        sentBy: myId,
+        sentTo: chatId,
         messages: message,
-        time: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
         status: 'MESSAGE',
       };
+
+      firestore()
+        .collection('chats')
+        .doc(myId + chatId)
+        .collection('messages')
+        .add(newMessage);
+      firestore()
+        .collection('chats')
+        .doc(chatId + myId)
+        .collection('messages')
+        .add(newMessage);
+
       appendAndTransformChats(newMessage);
-      // Simulate a response from the other user after a short delay
-      setTimeout(() => {
-        let newOtherUserMessage = {
-          id: 'uuidv4()nnn',
-          senderName: 'otherUser',
-          receiverName: 'user',
-          messages: message,
-          time: new Date().toISOString(),
-          status: 'MESSAGE',
-        };
-        appendAndTransformChats(newOtherUserMessage);
-      }, 1000);
+
       setMessage('');
     }
+  };
+
+  const loadPreviousChats = (chats: messageType[]) => {
+    let updatedChatsByDate = {...chatsByDate};
+
+    chats.map(obj => {
+      const messageDate = new Date(obj.createdAt).toDateString();
+      if (!updatedChatsByDate[messageDate]) {
+        updatedChatsByDate[messageDate] = [];
+      }
+      updatedChatsByDate[messageDate].push(obj);
+    });
+    setChatsByDate(updatedChatsByDate);
   };
 
   function appendAndTransformChats(newChat: any) {
@@ -87,7 +112,6 @@ const ChatScreen = ({route}: any) => {
 
     let updatedChatsByDate = {...chatsByDate};
 
-    console.log(updatedChatsByDate);
     // If the date doesn't exist in the chatsByDate object, create an array for it
     if (!updatedChatsByDate[messageDate]) {
       updatedChatsByDate[messageDate] = [];
@@ -104,33 +128,33 @@ const ChatScreen = ({route}: any) => {
     setChats([{text: 'Hey there!', sender: 'user'}]);
   };
 
-  const phoneNumber = '+919740730152';
   const makePhoneCall = () => {
-    Linking.openURL(`tel:${phoneNumber}`);
+    Linking.openURL(`tel:${userData?.phoneNumber}`);
   };
 
-  const [messages, setMessages] = useState([]);
-
   useEffect(() => {
-    // setMessages([
-    //   {
-    //     _id: 1,
-    //     text: 'Hello developer',
-    //     createdAt: new Date(),
-    //     user: {
-    //       _id: 2,
-    //       name: 'React Native',
-    //       avatar: 'https://placeimg.com/140/140/any',
-    //     },
-    //   },
-    // ])
-  }, []);
+    getUserData();
+    const subscriber = firestore()
+      .collection('chats')
+      .doc(myId + chatId)
+      .collection('messages')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(documentSnapshot => {
+        const allMsg = documentSnapshot.docs.map(item => {
+          // console.log('item', item);
+          //@ts-ignore
+          return {...item._data, createdAt: new Date()};
+        });
+        loadPreviousChats(allMsg);
+      });
 
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
-    );
-  }, []);
+    // Stop listening for updates when no longer required
+    return () => {
+      //@ts-ignore
+      subscriber();
+    };
+  }, [chatId]);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* Header */}
@@ -145,10 +169,10 @@ const ChatScreen = ({route}: any) => {
         />
         <View style={{flex: 1}}>
           <Text style={[globalStyles.titleText, globalStyles.white]}>
-            {dummyChatUser.name}
+            {userData?.fullName}
           </Text>
           <Text style={[globalStyles.lightText, globalStyles.white]}>
-            {dummyChatUser.status}
+            {userData?.phoneNumber}
           </Text>
         </View>
         <View style={styles.iconContainer}>
@@ -202,7 +226,7 @@ const ChatScreen = ({route}: any) => {
                   <View>
                     <Text
                       style={
-                        ch.senderName === 'user'
+                        ch.sentBy === myId
                           ? styles.userMessage
                           : styles.otherUserMessage
                       }>
@@ -211,11 +235,11 @@ const ChatScreen = ({route}: any) => {
                   </View>
                   <Text
                     style={
-                      ch.senderName === 'user'
+                      ch.sentBy === myId
                         ? styles.userMessageTime
                         : styles.otherMessageTime
                     }>
-                    {moment(ch.time).format('h:mm a')}
+                    {moment(ch.createdAt).format('h:mm a')}
                   </Text>
                 </View>
               ))}

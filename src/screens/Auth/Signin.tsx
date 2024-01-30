@@ -112,7 +112,7 @@ const Signin = ({navigation}: any) => {
       console.log('existingUser', existingUser);
       dispatch(login({email, accessToken: '123'}));
       storeAsyncData('user', JSON.stringify(existingUser.docs[0].data()));
-      console.log(response);
+      console.log(existingUser.docs[0].data());
       setLoading(false);
       navigation.navigate('Home');
     } catch (error) {

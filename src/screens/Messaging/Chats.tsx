@@ -19,15 +19,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
-
-type ChatsType = {
-  userId: number;
-  name: string;
-  recentMessage: string;
-  recentMessageCount: number;
-  newMessage: boolean;
-  lastMessageTime: Date;
-};
+import {ChatsType} from '../../enums/ChatTypes';
 
 type userType = {
   email: string;
@@ -40,10 +32,10 @@ const Chats = ({navigation}: any) => {
   const [searchText, setSearchText] = useState('');
   const [users, setUsers] = useState<userType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [filteredCall, setFilteredCall] = useState<ChatsType[]>([]);
+  const [filteredCall, setFilteredCall] = useState<userType[]>([]);
 
   useEffect(() => {
-    const newArr = dummyChatData.filter(obj => obj.name.includes(searchText));
+    const newArr = users.filter(obj => obj.fullName.includes(searchText));
     setFilteredCall(newArr);
   }, [searchText]);
 
@@ -110,13 +102,7 @@ const Chats = ({navigation}: any) => {
 
       {searchText
         ? filteredCall.map(obj => <ChatTile key={obj.userId} {...obj} />)
-        : dummyChatData.map(obj => <ChatTile key={obj.userId} {...obj} />)}
-
-      {users.map(obj => (
-        <TouchableOpacity>
-          <Text>{obj.email}</Text>
-        </TouchableOpacity>
-      ))}
+        : users.map(obj => <ChatTile key={obj.userId} {...obj} />)}
     </ScrollView>
   );
 };

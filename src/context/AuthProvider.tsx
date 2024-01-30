@@ -8,10 +8,10 @@ import {
 import {Product} from '../enums/Product';
 
 interface AuthContextProps {
-  auth: any; // Replace 'any' with the appropriate type for your auth state
-  setAuth: Dispatch<SetStateAction<any>>; // Replace 'any' with the appropriate type for setAuth function
-  products: Product[]; // Replace 'any' with the appropriate type for your products state
-  setProducts: Dispatch<SetStateAction<Product[]>>; // Replace 'any' with the appropriate type for setProducts function
+  auth: any;
+  setAuth: Dispatch<SetStateAction<any>>;
+  products: Product[];
+  setProducts: Dispatch<SetStateAction<Product[]>>;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -21,8 +21,8 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
-  const [auth, setAuth] = useState<any>({}); // Replace 'any' with the appropriate type for your auth state
-  const [products, setProducts] = useState<Product[]>([]); // Replace 'any' with the appropriate type for your products state
+  const [auth, setAuth] = useState<any>({});
+  const [products, setProducts] = useState<Product[]>([]);
 
   return (
     <AuthContext.Provider value={{auth, setAuth, products, setProducts}}>
