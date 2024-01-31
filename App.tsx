@@ -10,6 +10,7 @@ import {useCameraPermission} from 'react-native-vision-camera';
 import SplashScreen from 'react-native-splash-screen';
 import messaging from '@react-native-firebase/messaging';
 import {Alert} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 function App() {
   const {hasPermission, requestPermission} = useCameraPermission();
@@ -37,11 +38,13 @@ function App() {
   };
 
   return (
-    <AuthProvider>
-      <Provider store={store}>
-        <Navigation />
-      </Provider>
-    </AuthProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <AuthProvider>
+        <Provider store={store}>
+          <Navigation />
+        </Provider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
 
