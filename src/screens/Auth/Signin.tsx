@@ -10,12 +10,14 @@ import {
   Appearance,
   Dimensions,
   Image,
+  Pressable,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -35,6 +37,9 @@ import * as yup from 'yup';
 import {storeAsyncData} from '../../utilities/asyncStorage';
 
 import firestore from '@react-native-firebase/firestore';
+import {Reader, ReaderProvider} from '@epubjs-react-native/core';
+import {useFileSystem} from '@epubjs-react-native/file-system';
+import {Button, Overlay} from '@rneui/themed';
 
 // import {StatusBar} from 'react-native';
 
@@ -52,7 +57,9 @@ const loginValidationSchema = yup.object().shape({
 });
 
 const Signin = ({navigation}: any) => {
+  const {width, height} = useWindowDimensions();
   const [isVisible, setIsVisible] = useState(false);
+  const [bookVisible, setBookVisibility] = useState(false);
   const [loginToggle, setLoginToggle] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -202,15 +209,14 @@ const Signin = ({navigation}: any) => {
           disabled={false}
         />
 
-        <Text
+        <Pressable
           onPress={() => {
-            setLoginToggle(true);
-            setIsVisible(true);
-          }}
-          style={styles.signUpText}>
-          Already a Member?
-        </Text>
+            setBookVisibility(true);
+          }}>
+          <Text style={styles.signUpText}>Already a Member?</Text>
+        </Pressable>
       </View>
+      {/* Sign in Bottom Sheet */}
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
@@ -339,6 +345,19 @@ const Signin = ({navigation}: any) => {
           )}
         </View>
       </BottomSheet>
+
+      <Overlay
+        isVisible={bookVisible}
+        onBackdropPress={() => setBookVisibility(!bookVisible)}>
+        <ReaderProvider>
+          <Reader
+            src="https://s3.amazonaws.com/moby-dick/OPS/package.opf"
+            width={width}
+            height={height}
+            fileSystem={useFileSystem}
+          />
+        </ReaderProvider>
+      </Overlay>
     </View>
   );
 };
@@ -491,5 +510,18 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 24,
+  },
+  button: {
+    margin: 10,
+  },
+  textPrimary: {
+    marginVertical: 20,
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  textSecondary: {
+    marginBottom: 10,
+    textAlign: 'center',
+    fontSize: 17,
   },
 });

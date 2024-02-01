@@ -12,19 +12,19 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 const Navigation = () => {
-  const auth = useSelector((state: RootState) => state.auth);
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  // const auth = useSelector((state: RootState) => state.auth);
+  // const [isLoggedIn, setLoggedIn] = useState(false);
 
-  const getUser = async () => {
-    const curUser = await getAsyncData('user');
-    if (curUser) {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
-  };
+  // const getUser = async () => {
+  //   const curUser = await getAsyncData('user');
+  //   if (curUser) {
+  //     setLoggedIn(true);
+  //   } else {
+  //     setLoggedIn(false);
+  //   }
+  // };
 
-  getUser();
+  // getUser();
   return <MainStack />;
 };
 

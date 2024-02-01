@@ -1,8 +1,6 @@
-import React, {useEffect, useLayoutEffect} from 'react';
-import {ActivityIndicator, StatusBar, StyleSheet, View} from 'react-native';
+import React, {useLayoutEffect} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import {getAsyncData} from '../utilities/asyncStorage';
-//@ts-ignore
-import SplashScreen from 'react-native-splash-screen';
 
 function AuthLoadingScreen({navigation}: any) {
   // Fetch the token from storage then navigate to our appropriate place
