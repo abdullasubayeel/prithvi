@@ -51,6 +51,8 @@ const Signup = ({navigation}: any) => {
     message: '',
   });
   const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  console.log(error);
   const handleSignUp = async ({
     fullName,
     phoneNumber,
@@ -65,6 +67,7 @@ const Signup = ({navigation}: any) => {
     confirmPassword: string;
   }) => {
     setLoading(true);
+    console.log('signing up');
     const userId = uuid.v4().toString();
     try {
       const existingUser = await firestore()
@@ -72,9 +75,10 @@ const Signup = ({navigation}: any) => {
         .where('email', '==', email)
         .get();
 
-      if (existingUser.size !== 0) {
+      console.log(existingUser.empty);
+      if (existingUser.empty) {
         setLoading(false);
-
+        setError('User Already exists');
         return;
       }
       const storeUser = firestore()

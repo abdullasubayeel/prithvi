@@ -11,7 +11,12 @@ import SplashScreen from 'react-native-splash-screen';
 import messaging from '@react-native-firebase/messaging';
 import {Alert} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 
+const client = new ApolloClient({
+  uri: 'http://localhost:3000/graphql',
+  cache: new InMemoryCache(),
+});
 function App() {
   const {hasPermission, requestPermission} = useCameraPermission();
 
@@ -39,11 +44,13 @@ function App() {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <AuthProvider>
-        <Provider store={store}>
-          <Navigation />
-        </Provider>
-      </AuthProvider>
+      <ApolloProvider client={client}>
+        <AuthProvider>
+          <Provider store={store}>
+            <Navigation />
+          </Provider>
+        </AuthProvider>
+      </ApolloProvider>
     </GestureHandlerRootView>
   );
 }
